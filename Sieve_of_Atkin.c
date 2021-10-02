@@ -1,39 +1,50 @@
-// Using Sieve of Atkin method to find all prime numbers up to 100000 super fast (you can modify it to increase the limit)!
 
-/*
-	Contributor: Binit Ghimire (@TheBinitGhimire)
-	Output Format: | 2 | 3 | 5 | 7 | 11 | 13 | 17 | 19 | 23 | 29 | ... | ... | ... |
-*/
-
-#include <stdio.h>
-#include <stdbool.h>
-
-int main(){
-    int a=2,b=100000;
-    bool s[100000] = {0};
-    int i,j;
-	
-	// Manually specifying 2 and 3!
-    printf("| 2 | 3 ");
-    for(i=0; i<b; i++) s[i] = 0;
-	
-	// Sieve of Atkin implementation!
-    for(i=1; i*i<b; i++){
-        for(j=1;j*j<b;j++){
-            int n=(4*i*i)+(j*j);
-            if((n<=b) && (n%12==1 || n%12==5)) s[n]^=1;
-            n=(3*i*i) + (j*j);
-            if(n<=b && n%12==7) s[n]^=1;
-            n=(3*i*i) - (j*j);
-            if(i>j && n<=b && n%12 ==11) s[n]^=1;
+// C++ program to print all primes
+// smaller than or equal to
+// n using Sieve of Eratosthenes
+#include <bits/stdc++.h>
+using namespace std;
+ 
+void SieveOfEratosthenes(int n)
+{
+    // Create a boolean array
+    // "prime[0..n]" and initialize
+    // all entries it as true.
+    // A value in prime[i] will
+    // finally be false if i is
+    // Not a prime, else true.
+    bool prime[n + 1];
+    memset(prime, true, sizeof(prime));
+ 
+    for (int p = 2; p * p <= n; p++)
+    {
+        // If prime[p] is not changed,
+        // then it is a prime
+        if (prime[p] == true)
+        {
+            // Update all multiples
+            // of p greater than or
+            // equal to the square of it
+            // numbers which are multiple
+            // of p and are less than p^2
+            // are already been marked.
+            for (int i = p * p; i <= n; i += p)
+                prime[i] = false;
         }
     }
-
-    for(int m=5; m*m<b; m++){
-        if(s[m]==1) for(i=m*m; i<b; i+=m*m) s[i]=0;
-    }
-	
-	// Printing the final results!
-    for(i=5;i<b;i++) if(s[i]==1) printf("| %d ", i);
+ 
+    // Print all prime numbers
+    for (int p = 2; p <= n; p++)
+        if (prime[p])
+            cout << p << " ";
+}
+ 
+// Driver Code
+int main()
+{
+    int n = 100000000;
+    cout << "Following are the prime numbers smaller "
+         << " than or equal to " << n << endl;
+    SieveOfEratosthenes(n);
     return 0;
 }
