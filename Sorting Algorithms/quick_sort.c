@@ -1,67 +1,68 @@
+/*  C Program to implement Quick Sort using recursion  */
+
 #include <stdio.h>
-#include <stdlib.h>
 
-int hoare_partition(int l, int r, int a[]){
-    int p = a[l];
-    int i = l, j = r+1, temp;
-
-    do{                                     // till i and j cross each other
-        do{
-            i++;
-        }while(!(a[i] >= p) && i <= r);        // i <= r is used so that i doesn't go out of bounds
-
-        do{
-            j--;
-        }while(!(a[j] <= p));
-
-        if(i <= r){                            // swap only if i is in bounds, i may go out of bounds and cause run time error due to i++ in do while and if the if statement isn't there
-            temp = a[i];
-            a[i] = a[j];
-            a[j] = temp;
-        }
-    }while(!(i >= j));
-
-    if(i <= r){
-        temp = a[i];
-        a[i] = a[j];
-        a[j] = temp;
-    }
-
-    temp = a[l];
-    a[l] = a[j];
-    a[j] = temp;
-
-    return j;
-}
-
-void quick_sort(int l, int r, int a[]){
-    if(l < r){
-        int s = hoare_partition(l, r, a);
-        quick_sort(l, s-1, a);
-        quick_sort(s+1, r, a);
-    }
-}
-
+void quicksort (int [], int, int);
 
 int main()
 {
-    int n, i;
-    printf("Enter n: ");
-    scanf("%d", &n);
+    int list[50];
+    int size, i;
 
-    int a[n];
-    printf("\nEnter the array elements: ");
-    for(i=0; i<n; ++i)
-        scanf("%d", &a[i]);
+    printf("How many elements u want to Sort :: ");
+    scanf("%d", &size);
 
-    printf("\nArray elements before sorting: ");
-    for(i=0; i<n; ++i)
-        printf("%d ", a[i]);
+    printf("\nEnter the elements below to be sorted :: \n");
 
-    quick_sort(0, n-1, a);
+    for (i = 0; i < size; i++)
+    {
+         printf("\nEnter [ %d ] element :: ",i+1);
+        scanf("%d", &list[i]);
+    }
 
-    printf("\nArray elements after sorting: ");
-    for(i=0; i<n; ++i)
-        printf("%d ", a[i]);
+    quicksort(list, 0, size - 1);
+
+    printf("\nAfter implementing Quick sort, Sorted List is :: \n\n");
+
+    for (i = 0; i < size; i++)
+    {
+        printf("%d  ", list[i]);
+    }
+
+    printf("\n");
+
     return 0;
+}
+
+void quicksort(int list[], int low, int high)
+{
+    int pivot, i, j, temp;
+    if (low < high)
+    {
+        pivot = low;
+        i = low;
+        j = high;
+        while (i < j)
+        {
+            while (list[i] <= list[pivot] && i <= high)
+            {
+                i++;
+            }
+            while (list[j] > list[pivot] && j >= low)
+            {
+                j--;
+            }
+            if (i < j)
+            {
+                temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+            }
+        }
+        temp = list[j];
+        list[j] = list[pivot];
+        list[pivot] = temp;
+        quicksort(list, low, j - 1);
+        quicksort(list, j + 1, high);
+    }
 }
